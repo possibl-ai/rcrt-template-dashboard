@@ -15,7 +15,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     getClient()
-      .queryBreadcrumbs({ limit: 50 })
+      .queryBreadcrumbs([], 50)
       .then((data: any) => {
         setItems(Array.isArray(data) ? data : data?.breadcrumbs || []);
       })

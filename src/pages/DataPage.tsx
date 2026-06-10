@@ -13,11 +13,10 @@ export default function DataPage() {
   const [tagFilter, setTagFilter] = useState('');
 
   useEffect(() => {
-    const params: Record<string, any> = { limit: 100 };
-    if (tagFilter.trim()) params.tags = [tagFilter.trim()];
+    const tags = tagFilter.trim() ? [tagFilter.trim()] : [];
 
     getClient()
-      .queryBreadcrumbs(params)
+      .queryBreadcrumbs(tags, 100)
       .then((data: any) => {
         setItems(Array.isArray(data) ? data : data?.breadcrumbs || []);
       })
@@ -59,11 +58,10 @@ export default function DataPage() {
     try {
       await getClient().createBreadcrumb({
         title: 'New Item',
-        type: 'item',
-        tags: ['status:pending'],
+        tags: ['type:item', 'status:pending'],
       });
       setLoading(true);
-      const data = await getClient().queryBreadcrumbs({ limit: 100 });
+      const data = await getClient().queryBreadcrumbs([], 100);
       setItems(Array.isArray(data) ? data : (data as any)?.breadcrumbs || []);
     } catch {}
     setLoading(false);
